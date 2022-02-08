@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Unity.Physics;
 using UnityEngine;
 
 public class InputMovementSystem : SystemBase
@@ -48,23 +49,23 @@ public class InputMovementSystem : SystemBase
 
         Entities
             .WithAll<PlayerTag>()
-            .ForEach((Entity entity, int nativeThreadIndex, ref Rotation rotation, ref VelocityComponent velocity) =>
+            .ForEach((Entity entity, int nativeThreadIndex, ref Rotation rotation, ref PhysicsVelocity velocity) =>
             {
                 if (right == 1)
                 {
-                    velocity.Value += math.mul(rotation.Value, new float3(1, 0, 0)).xyz * gameSettings.playerForce * deltaTime;
+                    velocity.Linear += math.mul(rotation.Value, new float3(1, 0, 0)).xyz * gameSettings.playerForce * deltaTime;
                 }
                 if (left == 1)
                 {
-                    velocity.Value += math.mul(rotation.Value, new float3(-1, 0, 0)).xyz * gameSettings.playerForce * deltaTime;
+                    velocity.Linear += math.mul(rotation.Value, new float3(-1, 0, 0)).xyz * gameSettings.playerForce * deltaTime;
                 }
                 if (thrust == 1)
                 {
-                    velocity.Value += math.mul(rotation.Value, new float3(0, 0, 1)).xyz * gameSettings.playerForce * deltaTime;
+                    velocity.Linear += math.mul(rotation.Value, new float3(0, 0, 1)).xyz * gameSettings.playerForce * deltaTime;
                 }
                 if (reverseThrust == 1)
                 {
-                    velocity.Value += math.mul(rotation.Value, new float3(0, 0, -1)).xyz * gameSettings.playerForce * deltaTime;
+                    velocity.Linear += math.mul(rotation.Value, new float3(0, 0, -1)).xyz * gameSettings.playerForce * deltaTime;
                 }
                 if (mouseX != 0 || mouseY != 0)
                 {

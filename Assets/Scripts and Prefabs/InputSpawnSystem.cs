@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Unity.Physics;
 using UnityEngine;
 
 public class InputSpawnSystem : SystemBase
@@ -66,7 +67,7 @@ public class InputSpawnSystem : SystemBase
 
         Entities
             .WithAll<PlayerTag>()
-            .ForEach((Entity entity, int nativeThreadIndex, in Translation position, in Rotation rotation, in VelocityComponent velocity, in BulletSpawnOffsetComponent bulletOffset) =>
+            .ForEach((Entity entity, int nativeThreadIndex, in Translation position, in Rotation rotation, in PhysicsVelocity velocity, in BulletSpawnOffsetComponent bulletOffset) =>
             {
                 if (selfDestruct == 1)
                 {
@@ -81,7 +82,7 @@ public class InputSpawnSystem : SystemBase
                 var newPosition = new Translation { Value = position.Value + math.mul(rotation.Value, bulletOffset.Value).xyz };
                 commandBuffer.SetComponent(nativeThreadIndex, bulletEntity, newPosition);
 
-                var vel = new VelocityComponent { Value = gameSettings.bulletVelocity * math.mul(rotation.Value, new float3(0, 0, 1).xyz) + velocity.Value };
+                var vel = new PhysicsVelocity { Linear = gameSettings.bulletVelocity * math.mul(rotation.Value, new float3(0, 0, 1).xyz) + velocity.Linear };
                 commandBuffer.SetComponent(nativeThreadIndex, bulletEntity, vel);
             })
             .ScheduleParallel();

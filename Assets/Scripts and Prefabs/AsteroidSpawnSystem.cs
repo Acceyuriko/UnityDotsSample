@@ -5,6 +5,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Unity.Physics;
 using UnityEngine;
 
 public class AsteroidSpawnSystem : SystemBase
@@ -65,7 +66,7 @@ public class AsteroidSpawnSystem : SystemBase
                 var randomVel = new Vector3(rand.NextFloat(-1f, 1f), rand.NextFloat(-1f, 1f), rand.NextFloat(-1f, 1f));
                 randomVel.Normalize();
                 randomVel = randomVel * settings.asteroidVelocity;
-                var vel = new VelocityComponent { Value = new float3(randomVel.x, randomVel.y, randomVel.z) };
+                var vel = new PhysicsVelocity { Linear = new float3(randomVel.x, randomVel.y, randomVel.z) };
                 commandBuffer.SetComponent(e, vel);
             }
         }).Schedule();
