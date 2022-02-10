@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Physics Category Names
   m_EditorClassIdentifier: 
   m_CategoryNames:
-  - 
-  - 
-  - 
-  - 
+  - Trigger
+  - Asteroid
+  - Bullet
+  - Player
   - 
   - 
   - 
