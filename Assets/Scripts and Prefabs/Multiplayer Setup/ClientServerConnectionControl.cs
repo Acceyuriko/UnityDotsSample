@@ -7,18 +7,19 @@ using UnityEngine;
 [UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
 public class ServerConnectionControl : SystemBase
 {
-    private ushort m_GamePort = 5001;
-
-    private struct InitializeServerComponent : IComponentData { }
+    private ushort m_GamePort;
 
     protected override void OnCreate()
     {
         RequireSingletonForUpdate<InitializeServerComponent>();
-        EntityManager.CreateEntity(typeof(InitializeServerComponent));
     }
 
     protected override void OnUpdate()
     {
+        var serverDataEntity = GetSingletonEntity<ServerDataComponent>();
+        var serverData = EntityManager.GetComponentData<ServerDataComponent>(serverDataEntity);
+        m_GamePort = serverData.GamePort;
+
         EntityManager.DestroyEntity(GetSingletonEntity<InitializeServerComponent>());
 
         var grid = EntityManager.CreateEntity();
@@ -40,20 +41,22 @@ public class ServerConnectionControl : SystemBase
 [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
 public class ClientConnectionControl : SystemBase
 {
-    public string m_ConnectToServerIp = "127.0.0.1";
-    public ushort m_GamePort = 5001;
-
-    private struct InitializeClientComponent : IComponentData { }
+    public string m_ConnectToServerIp;
+    public ushort m_GamePort;
 
     protected override void OnCreate()
     {
         RequireSingletonForUpdate<InitializeClientComponent>();
-
-        EntityManager.CreateEntity(typeof(InitializeClientComponent));
     }
 
     protected override void OnUpdate()
     {
+        var clientDataEntity = GetSingletonEntity<ClientDataComponent>();
+        var clientData = EntityManager.GetComponentData<ClientDataComponent>(clientDataEntity);
+
+        m_ConnectToServerIp = clientData.ConnectToServerIp.ToString();
+        m_GamePort = clientData.GamePort;
+
         EntityManager.DestroyEntity(GetSingletonEntity<InitializeClientComponent>());
 
         NetworkEndPoint ep = NetworkEndPoint.Parse(m_ConnectToServerIp, m_GamePort);
