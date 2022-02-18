@@ -332,6 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c1541e0c0f157e498c86a3718bfc461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClientServerInfo: {fileID: 1567287812}
 --- !u!4 &719688512
 Transform:
   m_ObjectHideFlags: 0
@@ -512,7 +513,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsServer: 0
   IsClient: 0
-  ConnectToServerIp: 
+  ConnectToServerIp: 127.0.0.1
   GamePort: 5001
 --- !u!4 &1567287813
 Transform:
