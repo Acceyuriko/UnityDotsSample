@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 717615412}
   - component: {fileID: 717615413}
   - component: {fileID: 717615414}
+  - component: {fileID: 717615415}
   m_Layer: 0
   m_Name: PrefabCollection
   m_TagString: Untagged
@@ -195,6 +196,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: {fileID: 7046818662526290534, guid: 471f98d824c6a5744ba27cdc5cb25273, type: 3}
+--- !u!114 &717615415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717615410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f160d7285c9294445abf81699b179594, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 966503489325222289, guid: f0377d41524d0a54e81bbf9a8a74049b, type: 3}
 --- !u!1 &1456295941
 GameObject:
   m_ObjectHideFlags: 0
