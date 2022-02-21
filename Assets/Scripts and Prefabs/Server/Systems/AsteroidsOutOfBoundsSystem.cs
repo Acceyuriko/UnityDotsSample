@@ -1,12 +1,11 @@
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
 using Unity.Transforms;
+using Unity.NetCode;
 using UnityEngine;
 
 
+[UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateBefore(typeof(EndFixedStepSimulationEntityCommandBufferSystem))]
 public class AsteroidsOutOfBoundsSystem : SystemBase

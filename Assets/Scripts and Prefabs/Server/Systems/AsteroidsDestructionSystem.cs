@@ -1,10 +1,8 @@
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
+using Unity.NetCode;
 
+[UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
 [UpdateInGroup(typeof(LateSimulationSystemGroup))]
 public class AsteroidsDestructionSystem : SystemBase
 {
