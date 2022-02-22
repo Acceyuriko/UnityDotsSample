@@ -74,13 +74,6 @@ public class InputSystem : SystemBase
         var inputFromEntity = GetBufferFromEntity<PlayerCommand>();
         var inputTargetTick = m_ClientSimulationSystemGroup.ServerTick;
 
-        var canShoot = false;
-        if (UnityEngine.Time.time >= m_NextTime)
-        {
-            canShoot = true;
-            m_NextTime += (1 / m_PerSecond);
-        }
-
         Entities
             .WithAll<NetworkIdComponent>()
             .WithNone<NetworkStreamDisconnected>()
@@ -106,12 +99,6 @@ public class InputSystem : SystemBase
                 {
                     if (inputFromEntity.HasComponent(commandTargetComponent.targetEntity))
                     {
-                        var willShoot = shoot;
-                        if (!canShoot && willShoot == 1)
-                        {
-                            willShoot = 0;
-                        }
-
                         var input = inputFromEntity[commandTargetComponent.targetEntity];
 
                         input.AddCommandData(new PlayerCommand
@@ -122,7 +109,7 @@ public class InputSystem : SystemBase
                             thrust = thrust,
                             reverseThrust = reverseThrust,
                             selfDestruct = selfDestruct,
-                            shoot = willShoot,
+                            shoot = shoot,
                             mouseX = mouseX,
                             mouseY = mouseY
                         });
