@@ -9,9 +9,6 @@ public class InputSystem : SystemBase
 
     private ClientSimulationSystemGroup m_ClientSimulationSystemGroup;
 
-    private float m_PerSecond = 10f;
-    private float m_NextTime = 0;
-
     private int m_FrameCount;
 
     protected override void OnCreate()
@@ -57,10 +54,23 @@ public class InputSystem : SystemBase
         }
         else
         {
-            var state = (int)Time.ElapsedTime % 3;
+            var state = (int)Time.ElapsedTime % 4;
             shoot = 1;
-            if (state == 0) left = 1;
-            else thrust = 1;
+            switch (state)
+            {
+                case 0:
+                    left = 1;
+                    break;
+                case 1:
+                    right = 1;
+                    break;
+                case 2:
+                    thrust = 1;
+                    break;
+                case 3:
+                    reverseThrust = 1;
+                    break;
+            }
 
             ++m_FrameCount;
             if (m_FrameCount % 100 == 0)

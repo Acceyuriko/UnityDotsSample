@@ -1,10 +1,8 @@
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
+using Unity.NetCode;
 
+[UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
 [UpdateInGroup(typeof(LateSimulationSystemGroup))]
 public class PlayerDestructionSystem : SystemBase
 {
@@ -18,11 +16,17 @@ public class PlayerDestructionSystem : SystemBase
     protected override void OnUpdate()
     {
         var commandBuffer = m_EndSimECB.CreateCommandBuffer().AsParallelWriter();
+        var commandTargetFromEntity = GetComponentDataFromEntity<CommandTargetComponent>();
 
         Entities
+            .WithNativeDisableParallelForRestriction(commandTargetFromEntity)
             .WithAll<DestroyTag, PlayerTag>()
-            .ForEach((Entity entity, int nativeThreadIndex) =>
+            .ForEach((Entity entity, int nativeThreadIndex, in PlayerEntityComponent playerEntity) =>
             {
+                var state = commandTargetFromEntity[playerEntity.PlayerEntity];
+                state.targetEntity = Entity.Null;
+                commandTargetFromEntity[playerEntity.PlayerEntity] = state;
+
                 commandBuffer.DestroyEntity(nativeThreadIndex, entity);
             }).WithBurst().ScheduleParallel();
 

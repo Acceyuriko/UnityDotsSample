@@ -33,7 +33,7 @@ public class PlayerGhostSpawnClassificationSystem : SystemBase
         var commandBuffer = m_BeginSimECB.CreateCommandBuffer().AsParallelWriter();
         var camera = m_CameraPrefab;
         var playerEntity = GetSingletonEntity<NetworkIdComponent>();
-        var commandTargetFromEntity = GetComponentDataFromEntity<CommandTargetComponent>(false);
+        var commandTargetFromEntity = GetComponentDataFromEntity<CommandTargetComponent>();
 
         Entities
             .WithAll<PlayerTag, PredictedGhostComponent>()
@@ -50,6 +50,22 @@ public class PlayerGhostSpawnClassificationSystem : SystemBase
                 var cameraEntity = commandBuffer.Instantiate(entityInQueryIndex, camera);
                 commandBuffer.AddComponent(entityInQueryIndex, cameraEntity, new Parent { Value = entity });
                 commandBuffer.AddComponent(entityInQueryIndex, cameraEntity, new LocalToParent());
+            })
+            .ScheduleParallel();
+
+        Entities
+            .WithNone<PlayerTag>()
+            .WithAll<GhostPlayerState>()
+            .WithNativeDisableParallelForRestriction(commandTargetFromEntity)
+            .ForEach((Entity entity, int entityInQueryIndex) => {
+                var commandTarget = commandTargetFromEntity[playerEntity];
+
+                if (entity == commandTarget.targetEntity)
+                {
+                    commandTarget.targetEntity = Entity.Null;
+                    commandTargetFromEntity[playerEntity] = commandTarget;
+                }
+                commandBuffer.RemoveComponent<GhostPlayerState>(entityInQueryIndex, entity);
             })
             .ScheduleParallel();
 
