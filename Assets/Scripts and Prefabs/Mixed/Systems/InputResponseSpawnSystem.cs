@@ -75,7 +75,7 @@ public class InputResponseSpawnSystem : SystemBase
                     commandBuffer.AddComponent(nativeThreadIndex, bullet, new PredictedGhostSpawnRequestComponent());
 
                     var newPosition = new Translation { Value = position.Value + math.mul(rotation.Value, bulletOffset.Value).xyz };
-                    var vel = new PhysicsVelocity { Linear = bulletVelocity * math.mul(rotation.Value, new float3(0, 0, 1).xyz + velocityComponent.Linear) };
+                    var vel = new PhysicsVelocity { Linear = bulletVelocity * math.mul(rotation.Value, new float3(0, 0, 1)).xyz + velocityComponent.Linear };
 
                     commandBuffer.SetComponent(nativeThreadIndex, bullet, newPosition);
                     commandBuffer.SetComponent(nativeThreadIndex, bullet, vel);
