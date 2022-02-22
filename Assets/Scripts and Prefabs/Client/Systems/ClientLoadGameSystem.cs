@@ -25,6 +25,7 @@ public class ClientLoadGameSystem : SystemBase
         var rpcFormEntity = GetBufferFromEntity<OutgoingRpcDataStreamBufferComponent>();
         var gameSettingsEntity = GetSingletonEntity<GameSettingsComponent>();
         var getGameSettingsComponentData = GetComponentDataFromEntity<GameSettingsComponent>();
+        var networkId = GetSingleton<NetworkIdComponent>();
 
         Entities
             .ForEach((Entity entity, in SendClientGameRpc request, in ReceiveRpcCommandRequestComponent requestSource) =>
@@ -51,7 +52,7 @@ public class ClientLoadGameSystem : SystemBase
                 commandBuffer.AddComponent(levelReq, new SendServerGameLoadedRpc());
                 commandBuffer.AddComponent(levelReq, new SendRpcCommandRequestComponent());
 
-                Debug.Log("Client loaded game");
+                Debug.Log($"Client {networkId.Value} loaded game");
             })
             .Schedule();
 

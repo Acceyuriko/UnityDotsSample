@@ -1,6 +1,7 @@
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.NetCode;
+using UnityEngine;
 
 public struct SentClientGameRpcTag : IComponentData { }
 
@@ -37,7 +38,9 @@ public class ServerSendGameSystem : SystemBase
                     bulletVelocity = serverData.bulletVelocity
                 });
 
-                commandBuffer.AddComponent(req, new SendRpcCommandRequestComponent());
+                commandBuffer.AddComponent(req, new SendRpcCommandRequestComponent{ TargetConnection = entity });
+
+                Debug.Log($"Server send game to client {netId.Value}");
             })
             .Schedule();
 
