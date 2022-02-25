@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ClientLaunchObjectData : MonoBehaviour
 {
-    public string IPAddress = "127.0.0.1";
+    public string IPAddress;
+    public string PlayerName;
+
     void Start()
     {
 

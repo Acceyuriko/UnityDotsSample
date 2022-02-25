@@ -27,6 +27,9 @@ public class ClientServerConnectionHandler : MonoBehaviour
             if (launchObject.GetComponent<ServerLaunchObjectData>() != null)
             {
                 ClientServerInfo.IsServer = true;
+                ClientServerInfo.GameName = launchObject.GetComponent<ServerLaunchObjectData>().GameName;
+                ClientServerInfo.BroadcastIpAddress = launchObject.GetComponent<ServerLaunchObjectData>().BroadcastIpAddress;
+                ClientServerInfo.BroadcastPort = launchObject.GetComponent<ServerLaunchObjectData>().BroadcastPort;
 
                 foreach (var world in World.All)
                 {
@@ -35,6 +38,7 @@ public class ClientServerConnectionHandler : MonoBehaviour
                         var ServerDataEntity = world.EntityManager.CreateEntity();
                         world.EntityManager.AddComponentData(ServerDataEntity, new ServerDataComponent
                         {
+                            GameName = ClientServerInfo.GameName,
                             GamePort = ClientServerInfo.GamePort
                         });
                         world.EntityManager.CreateEntity(typeof(InitializeServerComponent));
@@ -45,6 +49,7 @@ public class ClientServerConnectionHandler : MonoBehaviour
             {
                 ClientServerInfo.IsClient = true;
                 ClientServerInfo.ConnectToServerIp = launchObject.GetComponent<ClientLaunchObjectData>().IPAddress;
+                ClientServerInfo.PlayerName = launchObject.GetComponent<ClientLaunchObjectData>().PlayerName;
 
                 foreach (var world in World.All)
                 {
@@ -53,6 +58,7 @@ public class ClientServerConnectionHandler : MonoBehaviour
                         var ClientDataEntity = world.EntityManager.CreateEntity();
                         world.EntityManager.AddComponentData(ClientDataEntity, new ClientDataComponent
                         {
+                            PlayerName = ClientServerInfo.PlayerName,
                             ConnectToServerIp = ClientServerInfo.ConnectToServerIp,
                             GamePort = ClientServerInfo.GamePort
                         });

@@ -307,7 +307,7 @@ MonoBehaviour:
   SupportedGhostModes: 3
   OptimizationMode: 0
   Importance: 100
-  prefabId: 
+  prefabId: 49afa295ccb09344bbfe5786ad657399
   Name: Asteroid
   RefGameObjects: []
   ComponentNames: []

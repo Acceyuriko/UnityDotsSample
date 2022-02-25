@@ -5,6 +5,8 @@ public class LocalGamesFinder : MonoBehaviour
 {
 
     public UIDocument m_TitleUIDocument;
+    public string BroadcastIpAddress = "255.255.255.255";
+    public ushort BroadcastPort = 8014;
 
     private VisualElement m_titleScreenManagerVE;
 

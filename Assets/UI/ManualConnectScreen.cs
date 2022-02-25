@@ -10,8 +10,8 @@ public class ManualConnectScreen : VisualElement
 {
     TextField m_GameIp;
     TextField m_PlayerName;
+
     string m_HostName = "";
-    IPAddress m_MyIp;
 
     public new class UxmlFactory : UxmlFactory<ManualConnectScreen, UxmlTraits> { }
 
@@ -28,15 +28,9 @@ public class ManualConnectScreen : VisualElement
         m_GameIp = this.Q<TextField>("game-ip");
         m_PlayerName = this.Q<TextField>("player-name");
 
-        //  CLICKING CALLBACKS
-        this.Q("launch-connect-game")?.RegisterCallback<ClickEvent>(ev => ClickedJoinGame());
+        m_HostName = Dns.GetHostName();
+        m_PlayerName.value = m_HostName;
 
         this.UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
-
-    void ClickedJoinGame()
-    {
-        Debug.Log("clicked manual connect");
-    }
-
 }

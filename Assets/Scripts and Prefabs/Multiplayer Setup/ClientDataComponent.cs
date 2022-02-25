@@ -7,4 +7,5 @@ public struct ClientDataComponent : IComponentData
 {
     public FixedString64 ConnectToServerIp;
     public ushort GamePort;
+    public FixedString64 PlayerName;
 }

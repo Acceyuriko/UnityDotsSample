@@ -479,6 +479,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TitleUIDocument: {fileID: 330607841}
+  BroadcastIpAddress: 255.255.255.255
+  BroadcastPort: 8014
   m_localGameListItemAsset: {fileID: 9197481963319205126, guid: 9f031e3b321826b42aaa64d7366b0ca2, type: 3}
   perSecond: 1
 --- !u!4 &1076308105
@@ -737,7 +739,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ec6af744bf8dfb4ea7f335794c20398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameBroadcasting: {fileID: 1076308104}
   m_TitleUIDocument: {fileID: 330607841}
+  ServerLauncherObject: {fileID: 9159382350194699635, guid: 3d52c257263397949b5bd2328ec1aba5, type: 3}
+  ClientLauncherObject: {fileID: 8645869562921058834, guid: 86219edc0d1ce264f903cd07c493c1a5, type: 3}
 --- !u!4 &2127339112
 Transform:
   m_ObjectHideFlags: 0
