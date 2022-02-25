@@ -50,5 +50,11 @@ public class JoinGameScreen : VisualElement
         Debug.Log("clicked client game");
     }
 
-
+    public void LoadJoinScreenForSelectedServer(GameObject localGame)
+    {
+        m_GameName = this.Q<Label>("game-name");
+        m_GameIp = this.Q<Label>("game-ip");
+        m_GameName.text = localGame.name;
+        m_GameIp.text = localGame.name;
+    }
 }

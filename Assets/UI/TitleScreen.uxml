@@ -9,7 +9,7 @@
             <ui:VisualElement name="main-content" class="main-content">
                 <ui:Label text="3D XR Asteroids" name="title" class="title" />
                 <ui:VisualElement name="join-local-title" class="section-title-container">
-                    <ui:Label text="Join A Local Game" name="join-a-local-game" class="section-title" />
+                    <ui:Label text="Join A Local Game" name="join-a-local-game" class="section-title" style="-unity-text-align: upper-center;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="local-games-list-container" class="local-games-list-container">
                     <ui:ListView name="local-games-list" item-height="100" class="local-games-list" />
