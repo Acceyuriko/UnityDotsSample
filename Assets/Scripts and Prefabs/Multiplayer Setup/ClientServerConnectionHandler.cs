@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 using Unity.NetCode;
 using Unity.Entities;
 
@@ -9,6 +9,15 @@ public class ClientServerConnectionHandler : MonoBehaviour
     public ClientServerInfo ClientServerInfo;
 
     private GameObject[] launchObjects;
+
+    public UIDocument m_GameUIDocument;
+    private VisualElement m_GameManagerUIVE;
+
+    void OnEnable()
+    {
+        m_GameManagerUIVE = m_GameUIDocument.rootVisualElement;
+        m_GameManagerUIVE.Q("quit-game")?.RegisterCallback<ClickEvent>(ev => ClickedQuitGame());
+    }
 
     void Awake()
     {
@@ -35,8 +44,9 @@ public class ClientServerConnectionHandler : MonoBehaviour
             if (launchObject.GetComponent<ClientLaunchObjectData>() != null)
             {
                 ClientServerInfo.IsClient = true;
+                ClientServerInfo.ConnectToServerIp = launchObject.GetComponent<ClientLaunchObjectData>().IPAddress;
 
-                foreach(var world in World.All)
+                foreach (var world in World.All)
                 {
                     if (world.GetExistingSystem<ClientSimulationSystemGroup>() != null)
                     {
@@ -62,5 +72,26 @@ public class ClientServerConnectionHandler : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void ClickedQuitGame()
+    {
+#if UNITY_EDITOR
+        if (Application.isPlaying)
+#endif
+            SceneManager.LoadSceneAsync("NavigationScene");
+#if UNITY_EDITOR
+        else
+            Debug.Log("Loading: " + "NavigationScene");
+#endif
+    }
+
+    void OnDestroy()
+    {
+        World.DefaultGameObjectInjectionWorld.EntityManager.DestroyEntity(World.DefaultGameObjectInjectionWorld.EntityManager.UniversalQuery);
+        World.DisposeAllWorlds();
+
+        var bootstrap = new NetCodeBootstrap();
+        bootstrap.Initialize("defaultWorld");
     }
 }

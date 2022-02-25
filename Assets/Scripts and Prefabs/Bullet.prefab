@@ -336,7 +336,7 @@ MonoBehaviour:
   SupportedGhostModes: 3
   OptimizationMode: 0
   Importance: 200
-  prefabId: 
+  prefabId: 471f98d824c6a5744ba27cdc5cb25273
   Name: Bullet
   RefGameObjects: []
   ComponentNames: []

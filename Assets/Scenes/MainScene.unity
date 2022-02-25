@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClientServerInfo: {fileID: 1567287812}
+  m_GameUIDocument: {fileID: 1408707589}
 --- !u!4 &719688512
 Transform:
   m_ObjectHideFlags: 0
