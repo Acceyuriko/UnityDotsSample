@@ -34,7 +34,7 @@ public class ClientServerLauncher : MonoBehaviour
 
         m_HostGameScreen.Q("launch-host-game")?.RegisterCallback<ClickEvent>(ev => ClickedHostGame());
         m_JoinGameScreen.Q("launch-join-game")?.RegisterCallback<ClickEvent>(ev => ClickedJoinGame());
-        m_ManualConnectScreen.Q("launch-connect-game")?.RegisterCallback<ClickEvent>(ev => ClickedJoinGame());
+        m_ManualConnectScreen.Q("launch-connect-game")?.RegisterCallback<ClickEvent>(ev => ClickedConnectGame());
     }
 
     // Start is called before the first frame update

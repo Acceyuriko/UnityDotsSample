@@ -1,17 +1,9 @@
 using System;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
-using System.Collections;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Unity.Entities;
-using Unity.NetCode;
-using UnityEngine.SceneManagement;
 
 public class HostGameScreen : VisualElement
 {
@@ -49,7 +41,11 @@ public class HostGameScreen : VisualElement
             {
                 foreach (var addrInfo in netInterface.GetIPProperties().UnicastAddresses)
                 {
-                    if (addrInfo.Address.AddressFamily == AddressFamily.InterNetwork)
+                    Debug.Log("address: " + addrInfo.Address.ToString());
+                    if (
+                        addrInfo.Address.AddressFamily == AddressFamily.InterNetwork &&
+                        isInSubNet(addrInfo.Address, IPAddress.Parse("10.242.0.1"), IPAddress.Parse("255.255.0.0"))
+                    )
                     {
                         m_MyIp = addrInfo.Address;
                     }
@@ -62,5 +58,26 @@ public class HostGameScreen : VisualElement
         m_PlayerName.value = m_HostName;
 
         this.UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
+    }
+
+    private bool isInSubNet(IPAddress ip, IPAddress subnet, IPAddress mask)
+    {
+        byte[] ipAddressBytes = ip.GetAddressBytes();
+        byte[] subnetAddressBytes = subnet.GetAddressBytes();
+        byte[] maskBytes = mask.GetAddressBytes();
+
+        byte[] address = new byte[ipAddressBytes.Length];
+        for (int i = 0; i < address.Length; i++)
+        {
+            address[i] = (byte)(ipAddressBytes[i] & maskBytes[i]);
+        }
+
+        byte[] subnetAddress = new byte[subnetAddressBytes.Length];
+        for (int i = 0; i < subnetAddress.Length; i++)
+        {
+            subnetAddress[i] = (byte)(subnetAddressBytes[i] & maskBytes[i]);
+        }
+
+        return new IPAddress(subnetAddress).Equals(new IPAddress(address));
     }
 }

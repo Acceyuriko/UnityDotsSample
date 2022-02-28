@@ -94,6 +94,7 @@ public class ClientServerConnectionHandler : MonoBehaviour
 
     void OnDestroy()
     {
+        Debug.Log("MainScene: ClientServerConnectionHandler OnDestroy");
         World.DefaultGameObjectInjectionWorld.EntityManager.DestroyEntity(World.DefaultGameObjectInjectionWorld.EntityManager.UniversalQuery);
         World.DisposeAllWorlds();
 
