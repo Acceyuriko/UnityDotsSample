@@ -41,7 +41,6 @@ public class HostGameScreen : VisualElement
             {
                 foreach (var addrInfo in netInterface.GetIPProperties().UnicastAddresses)
                 {
-                    Debug.Log("address: " + addrInfo.Address.ToString());
                     if (
                         addrInfo.Address.AddressFamily == AddressFamily.InterNetwork &&
                         isInSubNet(addrInfo.Address, IPAddress.Parse("10.242.0.1"), IPAddress.Parse("255.255.0.0"))
