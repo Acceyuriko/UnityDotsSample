@@ -5,6 +5,28 @@ learn [dots-tutorial](https://dots-tutorial.moetsi.com/)
 ### 操作
 空格创建角色，并发射子弹， wasd 控制移动，右键拖动控制视角。
 
+### Multiplayer
+#### Hosting a game
+- 选择 `Host a game`，`ClientServerLaucnher` 则会启动 `ServerWorld`
+- `ClientServerConnectionControl` 中会监听游戏端口。
+- `GameServerBroadcasting` 启动一个 UdpClient，在 `BroadcastPort` 上向局域网内所有 `ReceivePort` 广播服务器消息。
+
+#### Joinning a game
+- `LocalGamesFinder` 启动一个 UdpClient，监听 `ReceivePort` 上的服务器消息，并将服务器消息显示在 `JoinGameScreen` 中。
+- 用户选择一个服务器，并点击 `JoinGameScreen` 中的 `Join` 按钮，或通过 `ManulConnect` 手动指定一个服务器进行连接。
+- `ClientServerLauncher` 会启动 `ClientWorld`。
+- `ClientServerConnectionControl` 则会与服务器建立连接。
+
+#### Leaving a game
+- 点击 `Quit Game`。
+- 当前是客户端
+  - 在客户端的 NCE 中，加入 `NetworkStreamRequestDisconnect` Component。
+  - 服务端遍历 `NetworkStreamDisconnected` 组件，将该 NCE 对应的客户端数据移除，如 PlayerEntity。
+- 当前是服务端
+  - 在所有 NCE 中，加入 `NetworkStreamRequestDisconnect` Component。
+  - 客户端遍历 `NetworkStreamDisconnected` 组件，退出 `MainScene`，回到 `NavigationScene`
+
+
 ### 游戏启动
 
 - `ClientServerConnectionHandler` 在 ServerWorld 与 ClientWorld 中根据编辑器里配置的 LaunchObject 生成初始化 Entity `InitializeServerComponent` 和 `InitializeClientComponent`。
