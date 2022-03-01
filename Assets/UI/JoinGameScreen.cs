@@ -1,17 +1,7 @@
 using System;
-using System.Text;
 using System.Net;
-using System.Net.Sockets;
-using System.Net.NetworkInformation;
-using System.Collections;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Unity.Entities;
-using Unity.NetCode;
-using UnityEngine.SceneManagement;
 
 public class JoinGameScreen : VisualElement
 {
@@ -37,24 +27,17 @@ public class JoinGameScreen : VisualElement
         m_GameIp = this.Q<Label>("game-ip");
         m_PlayerName = this.Q<TextField>("player-name");
 
-        //  CLICKING CALLBACKS
-        this.Q("launch-host-game")?.RegisterCallback<ClickEvent>(ev => ClickedJoinGame());
-
-
+        m_HostName = Dns.GetHostName();
+        m_PlayerName.value = m_HostName;
 
         this.UnregisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
-    void ClickedJoinGame()
-    {
-        Debug.Log("clicked client game");
-    }
-
-    public void LoadJoinScreenForSelectedServer(GameObject localGame)
+    public void LoadJoinScreenForSelectedServer(ServerInfoObject localGame)
     {
         m_GameName = this.Q<Label>("game-name");
         m_GameIp = this.Q<Label>("game-ip");
-        m_GameName.text = localGame.name;
-        m_GameIp.text = localGame.name;
+        m_GameName.text = localGame.gameName;
+        m_GameIp.text = localGame.ipAddress;
     }
 }
