@@ -39,6 +39,7 @@ public class ClientServerConnectionHandler : MonoBehaviour
                 ClientServerInfo.GameName = launchObject.GetComponent<ServerLaunchObjectData>().GameName;
                 ClientServerInfo.BroadcastIpAddress = launchObject.GetComponent<ServerLaunchObjectData>().BroadcastIpAddress;
                 ClientServerInfo.BroadcastPort = launchObject.GetComponent<ServerLaunchObjectData>().BroadcastPort;
+                ClientServerInfo.ReceivePort = launchObject.GetComponent<ServerLaunchObjectData>().ReceivePort;
 
                 foreach (var world in World.All)
                 {

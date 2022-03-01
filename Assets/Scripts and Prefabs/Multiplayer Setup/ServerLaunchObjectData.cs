@@ -7,6 +7,7 @@ public class ServerLaunchObjectData : MonoBehaviour
     public string GameName;
     public string BroadcastIpAddress;
     public ushort BroadcastPort;
+    public ushort ReceivePort;
 
     void Start()
     {

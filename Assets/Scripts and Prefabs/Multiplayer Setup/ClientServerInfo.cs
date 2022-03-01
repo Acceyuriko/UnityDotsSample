@@ -14,6 +14,7 @@ public class ClientServerInfo : MonoBehaviour
 
     public string BroadcastIpAddress;
     public ushort BroadcastPort;
+    public ushort ReceivePort;
 
     void Start()
     {

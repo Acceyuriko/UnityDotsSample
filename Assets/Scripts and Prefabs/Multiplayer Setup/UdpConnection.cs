@@ -12,29 +12,31 @@ public class UdpConnection
     private UdpClient udpClient;
 
     private string sendToIp;
-    private int sendOrReceivePort;
+    private int sendPort;
+    private int receivePort;
 
-    private readonly Queue<string> incomingQueue = new Queue<string>();
+    private readonly Queue<ServerInfoObject> incomingQueue = new Queue<ServerInfoObject>();
     private Thread receiveThread;
     private bool threadRunning = false;
     private IPAddress m_MyIp;
 
-    public void StartConnection(string sendToIp, int sendOrReceivePort)
+    public void StartConnection(string sendToIp, int sendPort, int receivePort, bool send)
     {
         try
         {
-            udpClient = new UdpClient(sendOrReceivePort);
+            udpClient = new UdpClient(send ? sendPort : receivePort);
         }
         catch (Exception e)
         {
-            Debug.Log("Failed to listen for UDP at port " + sendOrReceivePort + ": " + e.Message);
+            Debug.Log("Failed to listen for UDP at port " + (send ? sendPort : receivePort).ToString() + ": " + e.Message);
             return;
         }
 
         m_MyIp = getMyIp();
         udpClient.EnableBroadcast = true;
         this.sendToIp = sendToIp;
-        this.sendOrReceivePort = sendOrReceivePort;
+        this.sendPort = sendPort;
+        this.receivePort = receivePort;
     }
 
     public void StartReceiveThread()
@@ -52,13 +54,16 @@ public class UdpConnection
         {
             try
             {
-                Debug.Log("starting receive on " + m_MyIp.ToString() + " and port " + sendOrReceivePort.ToString());
+                Debug.Log("starting receive on port:" + receivePort.ToString());
                 Byte[] receiveBytes = client.Receive(ref remoteIpEndPoint);
                 string returnData = Encoding.UTF8.GetString(receiveBytes);
 
+                var info = JsonUtility.FromJson<ServerInfoObject>(returnData);
+                info.ipAddress = remoteIpEndPoint.Address.ToString();
+
                 lock (incomingQueue)
                 {
-                    incomingQueue.Enqueue(returnData);
+                    incomingQueue.Enqueue(info);
                 }
             }
             catch (SocketException e)
@@ -88,7 +93,7 @@ public class UdpConnection
             int i = 0;
             while (incomingQueue.Count != 0)
             {
-                pendingServerInfos[i] = JsonUtility.FromJson<ServerInfoObject>(incomingQueue.Dequeue());
+                pendingServerInfos[i] = incomingQueue.Dequeue();
                 i++;
             }
         }
@@ -98,7 +103,7 @@ public class UdpConnection
     public void Send(float floatTime, string gameName)
     {
         string stringTime = floatTime.ToString();
-        IPEndPoint sendToEndPoint = new IPEndPoint(IPAddress.Parse(sendToIp), sendOrReceivePort);
+        IPEndPoint sendToEndPoint = new IPEndPoint(IPAddress.Parse(sendToIp), receivePort);
 
         ServerInfoObject thisServerInfoObject = new ServerInfoObject();
         thisServerInfoObject.gameName = gameName;
@@ -112,7 +117,7 @@ public class UdpConnection
 
     public void Stop()
     {
-        if (threadRunning == true)
+        if (threadRunning)
         {
             receiveThread.Abort();
             threadRunning = false;

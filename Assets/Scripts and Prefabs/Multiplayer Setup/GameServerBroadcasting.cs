@@ -16,12 +16,9 @@ public class GameServerBroadcasting : MonoBehaviour
             this.enabled = false;
         }
 
-        string sendToIp = ClientServerInfo.BroadcastIpAddress;
-        int sendToPort = ClientServerInfo.BroadcastPort;
-
         connection = new UdpConnection();
-        connection.StartConnection(sendToIp, sendToPort);
-        Debug.Log($"server broadcasting at {sendToIp}:{sendToPort}");
+        connection.StartConnection(ClientServerInfo.BroadcastIpAddress, ClientServerInfo.BroadcastPort, ClientServerInfo.ReceivePort, true);
+        Debug.Log($"server broadcasting at {ClientServerInfo.BroadcastIpAddress}:{ClientServerInfo.ReceivePort}");
     }
 
     // Update is called once per frame

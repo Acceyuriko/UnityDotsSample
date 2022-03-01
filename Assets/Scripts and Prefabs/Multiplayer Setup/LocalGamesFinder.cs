@@ -23,6 +23,7 @@ public class LocalGamesFinder : MonoBehaviour
 
     public string BroadcastIpAddress = "255.255.255.255";
     public ushort BroadcastPort = 8014;
+    public ushort ReceivePort = 8015;
 
     private UdpConnection connection;
 
@@ -36,7 +37,7 @@ public class LocalGamesFinder : MonoBehaviour
     void Start()
     {
         connection = new UdpConnection();
-        connection.StartConnection(BroadcastIpAddress, BroadcastPort);
+        connection.StartConnection(BroadcastIpAddress, BroadcastPort, ReceivePort, false);
         connection.StartReceiveThread();
 
         m_ListView.makeItem = MakeItem;

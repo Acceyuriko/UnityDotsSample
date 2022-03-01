@@ -9,6 +9,7 @@ public class ClientServerLauncher : MonoBehaviour
     public LocalGamesFinder GameBroadcasting;
     private string m_BroadcastIpAddress;
     private ushort m_BroadcastPort;
+    private ushort m_ReceivePort;
 
     public UIDocument m_TitleUIDocument;
 
@@ -42,6 +43,7 @@ public class ClientServerLauncher : MonoBehaviour
     {
         m_BroadcastIpAddress = GameBroadcasting.BroadcastIpAddress;
         m_BroadcastPort = GameBroadcasting.BroadcastPort;
+        m_ReceivePort = GameBroadcasting.ReceivePort;
     }
 
     // Update is called once per frame
@@ -97,6 +99,7 @@ public class ClientServerLauncher : MonoBehaviour
         serverObject.GetComponent<ServerLaunchObjectData>().GameName = gameName;
         serverObject.GetComponent<ServerLaunchObjectData>().BroadcastIpAddress = m_BroadcastIpAddress;
         serverObject.GetComponent<ServerLaunchObjectData>().BroadcastPort = m_BroadcastPort;
+        serverObject.GetComponent<ServerLaunchObjectData>().ReceivePort = m_ReceivePort;
 
         var world = World.DefaultGameObjectInjectionWorld;
 #if !UNITY_CLIENT || UNITY_SERVER || UNITY_EDITOR
