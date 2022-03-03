@@ -7,6 +7,7 @@ using UnityEngine;
 public class ClientLoadGameSystem : SystemBase
 {
     private BeginSimulationEntityCommandBufferSystem m_BeginSimECB;
+
     protected override void OnCreate()
     {
         m_BeginSimECB = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
@@ -17,12 +18,13 @@ public class ClientLoadGameSystem : SystemBase
         ));
 
         RequireSingletonForUpdate<GameSettingsComponent>();
+        RequireSingletonForUpdate<ClientDataComponent>();
     }
 
     protected override void OnUpdate()
     {
         var commandBuffer = m_BeginSimECB.CreateCommandBuffer();
-        var rpcFormEntity = GetBufferFromEntity<OutgoingRpcDataStreamBufferComponent>();
+        var rpcFromEntity = GetBufferFromEntity<OutgoingRpcDataStreamBufferComponent>();
         var gameSettingsEntity = GetSingletonEntity<GameSettingsComponent>();
         var getGameSettingsComponentData = GetComponentDataFromEntity<GameSettingsComponent>();
         var networkId = GetSingleton<NetworkIdComponent>();
@@ -32,7 +34,7 @@ public class ClientLoadGameSystem : SystemBase
             {
                 commandBuffer.DestroyEntity(entity);
 
-                if (!rpcFormEntity.HasComponent(requestSource.SourceConnection))
+                if (!rpcFromEntity.HasComponent(requestSource.SourceConnection))
                 {
                     return;
                 }
@@ -46,11 +48,22 @@ public class ClientLoadGameSystem : SystemBase
                     bulletVelocity = request.bulletVelocity,
                 };
 
+                var gameNameEntity = commandBuffer.CreateEntity();
+                commandBuffer.AddComponent(gameNameEntity, new GameNameComponent
+                {
+                    GameName = request.gameName
+                });
+
+                commandBuffer.AddComponent(requestSource.SourceConnection, new PlayerSpawningStateComponent());
                 commandBuffer.AddComponent(requestSource.SourceConnection, default(NetworkStreamInGame));
 
                 var levelReq = commandBuffer.CreateEntity();
                 commandBuffer.AddComponent(levelReq, new SendServerGameLoadedRpc());
                 commandBuffer.AddComponent(levelReq, new SendRpcCommandRequestComponent());
+
+                var playerReq = commandBuffer.CreateEntity();
+                commandBuffer.AddComponent(playerReq, new SendServerPlayerNameRpc{});
+                commandBuffer.AddComponent(playerReq, new SendRpcCommandRequestComponent());
 
                 Debug.Log($"Client {networkId.Value} loaded game");
             })

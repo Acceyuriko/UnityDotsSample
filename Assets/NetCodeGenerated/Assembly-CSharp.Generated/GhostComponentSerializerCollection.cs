@@ -11,6 +11,8 @@ namespace Assembly_CSharp.Generated
         protected override void OnCreate()
         {
             var ghostCollectionSystem = World.GetOrCreateSystem<GhostCollectionSystem>();
+            ghostCollectionSystem.AddSerializer(HighestScoreComponentGhostComponentSerializer.State);
+            ghostCollectionSystem.AddSerializer(PlayerScoreComponentGhostComponentSerializer.State);
             ghostCollectionSystem.AddSerializer(PlayerStateAndOffsetComponentGhostComponentSerializer.State);
             ghostCollectionSystem.AddSerializer(VelocityComponentGhostComponentSerializer.State);
         }

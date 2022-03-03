@@ -12,32 +12,22 @@ using Unity.Mathematics;
 namespace Assembly_CSharp.Generated
 {
     [BurstCompile]
-    public struct SendClientGameRpcSerializer : IComponentData, IRpcCommandSerializer<SendClientGameRpc>
+    public struct SendServerPlayerNameRpcSerializer : IComponentData, IRpcCommandSerializer<SendServerPlayerNameRpc>
     {
-        public void Serialize(ref DataStreamWriter writer, in RpcSerializerState state, in SendClientGameRpc data)
+        public void Serialize(ref DataStreamWriter writer, in RpcSerializerState state, in SendServerPlayerNameRpc data)
         {
-            writer.WriteInt((int) data.levelWidth);
-            writer.WriteInt((int) data.levelHeight);
-            writer.WriteInt((int) data.levelDepth);
-            writer.WriteFloat(data.playerForce);
-            writer.WriteFloat(data.bulletVelocity);
-            writer.WriteFixedString64(data.gameName);
+            writer.WriteFixedString64(data.playerName);
         }
 
-        public void Deserialize(ref DataStreamReader reader, in RpcDeserializerState state,  ref SendClientGameRpc data)
+        public void Deserialize(ref DataStreamReader reader, in RpcDeserializerState state,  ref SendServerPlayerNameRpc data)
         {
-            data.levelWidth = (int) reader.ReadInt();
-            data.levelHeight = (int) reader.ReadInt();
-            data.levelDepth = (int) reader.ReadInt();
-            data.playerForce = reader.ReadFloat();
-            data.bulletVelocity = reader.ReadFloat();
-            data.gameName = reader.ReadFixedString64();
+            data.playerName = reader.ReadFixedString64();
         }
         [BurstCompile]
         [MonoPInvokeCallback(typeof(RpcExecutor.ExecuteDelegate))]
         private static void InvokeExecute(ref RpcExecutor.Parameters parameters)
         {
-            RpcExecutor.ExecuteCreateRequestComponent<SendClientGameRpcSerializer, SendClientGameRpc>(ref parameters);
+            RpcExecutor.ExecuteCreateRequestComponent<SendServerPlayerNameRpcSerializer, SendServerPlayerNameRpc>(ref parameters);
         }
 
         static PortableFunctionPointer<RpcExecutor.ExecuteDelegate> InvokeExecuteFunctionPointer =
@@ -47,7 +37,7 @@ namespace Assembly_CSharp.Generated
             return InvokeExecuteFunctionPointer;
         }
     }
-    class SendClientGameRpcRpcCommandRequestSystem : RpcCommandRequestSystem<SendClientGameRpcSerializer, SendClientGameRpc>
+    class SendServerPlayerNameRpcRpcCommandRequestSystem : RpcCommandRequestSystem<SendServerPlayerNameRpcSerializer, SendServerPlayerNameRpc>
     {
         [BurstCompile]
         protected struct SendRpc : IJobEntityBatch
